@@ -1,10 +1,20 @@
+# How to run project development
+
+Firebase tools needs to be installed globally + Java JDK on the device then in project root:
+
+firebase emulators:start --project demo-smart-charger-socket --import=../firebaseExport --export-on-exit=../firebaseExport
+
+Afterwards:
+
+npm start
+
 # Application functionallity (tasks)
 
 :x: Access www.energidataservice.dk API for retrieving electricity consumption data
 
 :x: Graphs and visualization
 
-:x: Create electronic devices with their parameters and add them to Firestore DB
+:heavy_check_mark: Create electronic devices with their parameters and add them to Firestore DB
 
 Parameters for device creation:
 
@@ -29,6 +39,8 @@ User chooses:
 :black_small_square: Device from list of devices
 
 :black_small_square: Time to be ready with charging
+
+:black_small_square: Battery left
 
 :black_small_square: Socket number
 

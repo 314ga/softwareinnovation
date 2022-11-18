@@ -1,3 +1,3 @@
 import EnergyGraph from "./EnergyGraph";
-
-export { EnergyGraph };
+import AddDevice from "./AddDevice";
+export { EnergyGraph, AddDevice };
