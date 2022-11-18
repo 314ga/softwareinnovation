@@ -1,0 +1,27 @@
+#counter {
+    position: relative;
+    display: inline;
+}
+#socket
+{
+ max-width: 60%;
+
+}
+#over_pin1 {
+    position:absolute;
+    left:28%;
+    top:7%;
+    max-width: 8%;
+}
+#over_pin2 {
+    position:absolute;
+    left:38%;
+   top:7%;
+    max-width: 8%;
+}
+#over_pin3 {
+    position:absolute;
+    left:48%;
+   top:7%;
+    max-width: 8%;
+}

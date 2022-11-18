@@ -1,3 +1,4 @@
 import EnergyGraph from "./EnergyGraph";
 import AddDevice from "./AddDevice";
-export { EnergyGraph, AddDevice };
+import VirtualSocket from "./VirtualSocket";
+export { EnergyGraph, AddDevice, VirtualSocket };

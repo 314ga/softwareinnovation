@@ -1,7 +1,8 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { AddDevice, EnergyGraph } from "./Components";
+import { AddDevice, EnergyGraph, VirtualSocket } from "./Components";
 import { getDevices } from "./database/firestore";
+import "./Components/components.css";
 import Button from "react-bootstrap/Button";
 function App() {
   const [view, setView] = useState(0);
@@ -42,7 +43,7 @@ function App() {
         );
       }
       case 3: {
-        return <></>;
+        return <VirtualSocket />;
       }
       case 4: {
         return <></>;
@@ -71,9 +72,16 @@ function App() {
       >
         Energy Graphs
       </Button>{" "}
-      <Button variant="success">X</Button> <Button variant="warning">X</Button>{" "}
-      <Button variant="danger">X</Button> <Button variant="info">X</Button>{" "}
-      {renderView(view)}
+      <Button
+        variant="success"
+        onClick={() => {
+          setView(3);
+        }}
+      >
+        Virtual Socket
+      </Button>{" "}
+      <Button variant="warning">X</Button> <Button variant="danger">X</Button>{" "}
+      <Button variant="info">X</Button> {renderView(view)}
     </div>
   );
 }
