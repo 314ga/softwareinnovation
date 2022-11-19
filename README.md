@@ -1,12 +1,16 @@
 # How to run project development
 
-Firebase tools needs to be installed globally + Java JDK on the device then in project root:
+Assuming Node.js and Java JDK are present in your system
+Firebase tools needs to be installed globally:
 
-firebase emulators:start --project demo-smart-charger-socket --import=../firebaseExport --export-on-exit=../firebaseExport
+- npm install -g firebase-tools
 
-Afterwards:
+### To start emulator in this project:
 
-npm start
+Run in project root:
+
+- firebase emulators:start --project demo-smart-charger-socket --import=../firebaseExport --export-on-exit=../firebaseExport
+- npm start
 
 # Application functionallity (tasks)
 
