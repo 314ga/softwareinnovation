@@ -9,8 +9,9 @@ Firebase tools needs to be installed globally:
 
 Run in project root:
 
-- firebase emulators:start --project demo-smart-charger-socket --import=../firebaseExport --export-on-exit=../firebaseExport
-- npm start
+- npm install
+- **1st terminal:** firebase emulators:start --project demo-smart-charger-socket --import=./firebase-data --export-on-exit
+- **2nd terminal:** npm start
 
 # Application functionallity (tasks)
 
