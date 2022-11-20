@@ -4,6 +4,7 @@ import { AddDevice, EnergyGraph, VirtualSocket } from "./Components";
 import { getDevices } from "./database/firestore";
 import "./Components/components.css";
 import Button from "react-bootstrap/Button";
+import client from "./api/energiApi";
 function App() {
   const [view, setView] = useState(0);
   const [devices, setDevices] = useState([0]);
@@ -38,7 +39,7 @@ function App() {
       case 2: {
         return (
           <>
-            <EnergyGraph />
+            <EnergyGraph client={client} />
           </>
         );
       }

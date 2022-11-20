@@ -1,81 +1,57 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
-const client = axios.create({
-  baseURL:
-    "https://api.energidataservice.dk/dataset/Elspotprices?offset=0&start=2022-11-17T00:00&end=2022-11-18T00:00&filter=%7B%22PriceArea%22:[%22DK1%22]%7D&sort=HourUTC%20DESC&timezone=dk",
-  withCredentials: false,
-});
+// import client from "../api/energiApi";
 
-const EnergyGraph = () => {
+const EnergyGraph = (props) => {
   let today = new Date();
   let dd = String(today.getDate()).padStart(2, "0");
   let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
   let yyyy = today.getFullYear();
-  const [energyPrices, setEnergyPrices] = useState(null);
+  let minute = today.getHours();
+  let hour = today.getMinutes();
+  let startDate = yyyy + "-" + mm + "-" + dd + "T" + hour + ":" + minute;
+  let endDate = yyyy + "-" + mm + "-" + (dd + 1) + "T" + hour + ":" + minute;
+  const [energyPrices, setEnergyPrices] = useState([]);
 
+  const elData = [];
+  const pricesArray = [];
+  let currentDate = null;
+  let timestamp = null;
   useEffect(() => {
-    // axios
-    //   .get(
-    //     "https://www.nordpoolgroup.com/api/marketdata/page/41?currency=,DKK,DKK,EUR&endDate=20-11-2022",
-    //     {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //       },
-    //     }
-    //   )
-    client.get().then((response) => {
+    props.client.get().then((response) => {
       console.log("dkk");
-      setEnergyPrices(response.data);
-      console.log(energyPrices.records[0]);
+      elData.push(["Hour", "Price"]);
+
+      response.data.records.forEach((element) => {
+        pricesArray.push(element.SpotPriceDKK);
+        currentDate = new Date(element.HourDK);
+        timestamp = currentDate.getHours() + "h";
+        console.log(timestamp);
+        elData.push([timestamp, element.SpotPriceDKK / 1000]);
+      });
+
+      setEnergyPrices(elData);
+      console.log(elData);
     });
   }, []);
 
-  const refreshPrices = () => {
-    // client.get(
-    //   `start=${startDate}T00:00&end=${endDate}T00:00&filter=%7B%22PriceArea%22:[%22DK1%22,%22DK2%22]%7D&sort=HourUTC%20DESC&timezone=dk`
-    // );
-    today = yyyy + "-" + mm + "-" + dd;
-    console.log(today);
-  };
-  const refreshPricess = async (startDate, endDate) => {
-    // client.get(
-    //   `start=${startDate}T00:00&end=${endDate}T00:00&filter=%7B%22PriceArea%22:[%22DK1%22,%22DK2%22]%7D&sort=HourUTC%20DESC&timezone=dk`
-    // );
-  };
-
   return (
     <div className="app__energy">
-      {/* <h1>{energyPrices.title}</h1>
-      <p>{energyPrices.body}</p> */}
-      {energyPrices ? (
+      <h2 className="display-2">Today's Prices</h2>
+      <p className="lead">Prices on the graph are Price per kWh</p>
+      {energyPrices.length > 0 ? (
         <div>
-          {energyPrices.records.map((data, index) => {
-            return <div key={index}>{data.PriceArea}</div>;
-          })}
+          <Chart
+            chartType="ColumnChart"
+            data={energyPrices}
+            width="100%"
+            height="400px"
+            legendToggle
+          />
         </div>
       ) : (
         <div>No information found for this day</div>
       )}
-      <Chart
-        chartType="ColumnChart"
-        data={[
-          ["Age", "Weight"],
-          [4, 5.5],
-          [8, 12],
-        ]}
-        width="100%"
-        height="400px"
-        legendToggle
-      />
-      <button
-        type="button"
-        className="btn"
-        variant="outline"
-        onClick={refreshPrices}
-      >
-        Get
-      </button>
     </div>
   );
 };

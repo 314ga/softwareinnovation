@@ -15,9 +15,9 @@ Run in project root:
 
 # Application functionallity (tasks)
 
-:x: Access www.energidataservice.dk API for retrieving electricity consumption data
+:heavy_check_mark: Access www.energidataservice.dk API for retrieving electricity consumption data
 
-:x: Graphs and visualization
+:heavy_check_mark: Graphs and visualization
 
 :heavy_check_mark: Create electronic devices with their parameters and add them to Firestore DB
 
