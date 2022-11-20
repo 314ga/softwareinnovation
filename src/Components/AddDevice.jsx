@@ -12,33 +12,25 @@ const AddDevice = (props) => {
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState("");
   const DName = useRef("");
-  const DBatterySize = useRef(0);
-  const DChargerOutputV = useRef(0);
-  const DChargerOutputA = useRef(0);
+  const DChargeTime = useRef(0);
   const DChargeDays = useRef(0);
   const addDevice = (e) => {
     e.preventDefault();
     if (
       DName.current.value &&
-      DBatterySize.current.value &&
-      DChargerOutputV.current.value &&
-      DChargerOutputA.current.value &&
+      DChargeTime.current.value &&
       DChargeDays.current.value
     ) {
       const data = {
         name: DName.current.value,
-        batterySize: DBatterySize.current.value,
-        chargerOutputV: DChargerOutputV.current.value,
-        chargerOutputA: DChargerOutputA.current.value,
+        chargeTime: DChargeTime.current.value,
         chargeDays: DChargeDays.current.value,
       };
       addDeviceFirestore(data)
         .then((r) => {
           setShowSuccess(true);
           DName.current.value = "";
-          DBatterySize.current.value = null;
-          DChargerOutputV.current.value = null;
-          DChargerOutputA.current.value = null;
+          DChargeTime.current.value = null;
           DChargeDays.current.value = null;
         })
         .catch((e) => {
@@ -60,7 +52,7 @@ const AddDevice = (props) => {
               <Form.Label>Device name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Example: Owl"
+                placeholder="Example: Huawei P20"
                 ref={DName}
               />
             </Form.Group>
@@ -69,41 +61,17 @@ const AddDevice = (props) => {
         <Row className="justify-content-center">
           <Col sm={4}>
             <Form.Group className="mb-3" controlId="device">
-              <Form.Label>Battery size</Form.Label>
+              <Form.Label>Time from 0% to 100% charge</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Example: 4500"
-                ref={DBatterySize}
+                placeholder="Example: 180"
+                ref={DChargeTime}
               />
               <Form.Text className="text-muted">
-                Set batterry size in mAh
+                Set charge time in minutes
               </Form.Text>
             </Form.Group>
           </Col>
-          <Col className="justify-content-center" sm={4}>
-            <Form.Group className="mb-3" controlId="device">
-              <Form.Label>Charger Output V</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Example: 5"
-                ref={DChargerOutputV}
-              />
-              <Form.Text className="text-muted">Set output V in V</Form.Text>
-            </Form.Group>
-          </Col>
-          <Col sm={4}>
-            <Form.Group className="mb-3" controlId="device">
-              <Form.Label>Charger Output A</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Example: 4.5"
-                ref={DChargerOutputA}
-              />
-              <Form.Text className="text-muted">Set output A in A</Form.Text>
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row className="justify-content-md-center">
           <Col sm={4}>
             <Form.Group className="mb-3" controlId="device">
               <Form.Label>How often are you charging your device?</Form.Label>

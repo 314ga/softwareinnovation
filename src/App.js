@@ -1,18 +1,29 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { AddDevice, EnergyGraph, VirtualSocket } from "./Components";
-import { getDevices } from "./database/firestore";
+import { getDevices, getChargingPlan } from "./database/firestore";
 import "./Components/components.css";
 import Button from "react-bootstrap/Button";
 import client from "./api/energiApi";
 function App() {
   const [view, setView] = useState(0);
   const [devices, setDevices] = useState([0]);
+  const [chargingPlan, setChargingPlan] = useState([0]);
   useEffect(() => {
     getDevices()
       .then((r) => {
         if (r.length > 0) {
           setDevices(r);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    getChargingPlan()
+      .then((r) => {
+        if (r.length > 0) {
+          console.log(r);
+          setChargingPlan(r);
         }
       })
       .catch((e) => {
@@ -44,7 +55,7 @@ function App() {
         );
       }
       case 3: {
-        return <VirtualSocket />;
+        return <VirtualSocket devices={devices} chargingPlan={chargingPlan} />;
       }
       case 4: {
         return <></>;

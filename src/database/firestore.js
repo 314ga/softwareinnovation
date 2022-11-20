@@ -12,13 +12,18 @@ export const getTest = async () => {
 
 export const addDeviceFirestore = async (data) => {
   console.log(data);
-  // Add a new document in collection "cities"
   return await addDoc(collection(firestore, "devices"), {
     name: data.name,
-    battery_size: Number(data.batterySize),
-    charger_output_V: Number(data.chargerOutputV),
-    charger_output_A: Number(data.chargerOutputA),
+    charge_time: Number(data.chargeTime),
     charge_days: Number(data.chargeDays),
+  });
+};
+
+export const addChargingPlan = async (data) => {
+  const socketRef = firestore.collection("charging_plan").doc(data.socket);
+
+  return await socketRef.update({
+    charge_time: data.chargePlan,
   });
 };
 
@@ -30,4 +35,13 @@ export const getDevices = async () => {
   });
 
   return devices;
+};
+export const getChargingPlan = async () => {
+  const querySnapshot = await getDocs(collection(firestore, "charging_plan"));
+  let plan = [];
+  querySnapshot.forEach((doc) => {
+    plan.push(doc.data());
+  });
+
+  return plan;
 };

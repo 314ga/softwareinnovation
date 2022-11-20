@@ -25,3 +25,7 @@
    top:7%;
     max-width: 8%;
 }
+
+.on{
+    filter: invert(59%) sepia(11%) saturate(2134%) hue-rotate(73deg) brightness(97%) contrast(95%);
+}
