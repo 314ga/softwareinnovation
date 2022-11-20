@@ -35,9 +35,9 @@ Parameters for device creation:
 
 :black_small_square: Current battery status
 
-:x: Create virtual socket
+:heavy_check_mark: Create virtual socket
 
-:x: Start charging functionality
+:heavy_check_mark: Start charging functionality
 
 User chooses:
 

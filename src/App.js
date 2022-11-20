@@ -9,6 +9,8 @@ function App() {
   const [view, setView] = useState(0);
   const [devices, setDevices] = useState([0]);
   const [chargingPlan, setChargingPlan] = useState([0]);
+  const [priceData, setPriceData] = useState([]);
+  const [priceDataWithDate, setPriceDataWithDate] = useState([]);
   useEffect(() => {
     getDevices()
       .then((r) => {
@@ -22,13 +24,32 @@ function App() {
     getChargingPlan()
       .then((r) => {
         if (r.length > 0) {
-          console.log(r);
           setChargingPlan(r);
         }
       })
       .catch((e) => {
         console.log(e);
       });
+    client.get().then((response) => {
+      const elData = [];
+      const pricesArrayWithDate = [];
+      let currentDate = null;
+      let timestamp = null;
+
+      elData.push(["Hour", "Price"]);
+      response.data.records.forEach((element) => {
+        currentDate = new Date(element.HourDK);
+        timestamp = currentDate.getHours() + "h";
+
+        elData.push([timestamp, element.SpotPriceDKK / 1000]);
+        pricesArrayWithDate.push({
+          SpotPriceDKK: element.SpotPriceDKK / 1000,
+          HourDK: element.HourDK,
+        });
+      });
+      setPriceData(elData);
+      setPriceDataWithDate(pricesArrayWithDate);
+    });
   }, []);
 
   const renderView = (param) => {
@@ -50,12 +71,18 @@ function App() {
       case 2: {
         return (
           <>
-            <EnergyGraph client={client} />
+            <EnergyGraph priceData={priceData} />
           </>
         );
       }
       case 3: {
-        return <VirtualSocket devices={devices} chargingPlan={chargingPlan} />;
+        return (
+          <VirtualSocket
+            devices={devices}
+            chargingPlan={chargingPlan}
+            priceData={priceDataWithDate}
+          />
+        );
       }
       case 4: {
         return <></>;

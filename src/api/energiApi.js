@@ -9,7 +9,7 @@ let hour = today.getMinutes();
 let startDate = yyyy + "-" + mm + "-" + (dd - 2) + "T" + hour + ":" + minute;
 let endDate = yyyy + "-" + mm + "-" + (dd - 1) + "T" + hour + ":" + minute;
 const client = axios.create({
-  baseURL: `https://api.energidataservice.dk/dataset/${testy}?offset=0&start=&${startDate}&end=${endDate}&filter=%7B%22PriceArea%22:[%22DK1%22,%22DK2%22]%7D&sort=HourUTC%20DESC&timezone=dk`,
+  baseURL: `https://api.energidataservice.dk/dataset/Elspotprices?offset=0&start=2022-11-18T00:00&end=2022-11-20T00:00&filter=%7B%22PriceArea%22:[%22DK1%22]%7D&sort=HourDK%20ASC&timezone=dk`,
   withCredentials: false,
 });
 

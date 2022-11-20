@@ -1,5 +1,5 @@
 import { getDateYYYYMMDDHHMMSS } from "./dateParser";
-
+/*
 const prices = [
   { SpotPriceDKK: 1493, HourDK: "2022-11-20T00:00:00" },
   { SpotPriceDKK: 1333, HourDK: "2022-11-20T01:00:00" },
@@ -25,26 +25,32 @@ const prices = [
   { SpotPriceDKK: 1599, HourDK: "2022-11-20T21:00:00" },
   { SpotPriceDKK: 1099, HourDK: "2022-11-20T22:00:00" },
   { SpotPriceDKK: 1199, HourDK: "2022-11-20T23:00:00" },
-];
+];*/
 //device object:charge_days(frequency of charging-number),charge_time(minutes-number),name(string)
-export const getChargeTimes = (device, timeToCharge) => {
+export const getChargeTimes = (
+  device,
+  timeToCharge,
+  prices,
+  currentPercentage
+) => {
   const timeToChargeMinutes = timeToCharge * 60;
   const now = new Date();
   const currentH = now.getHours();
   //slice available time array to charge phone from current hour to available chargint ime period
   //we can now work with this array of prices
   //sort array from lowest to highest electricity price
-  console.log(currentH);
-  let slicedSorted = prices.slice(currentH, currentH + timeToCharge);
-
-  console.log(slicedSorted);
+  let slicedSorted = prices.slice(
+    currentH,
+    currentH + Number.parseInt(timeToCharge)
+  );
+  slicedSorted.sort(sortElPrices);
   let chargingSlotMinutes = [];
-  let deviceNeedCharge = device.charge_time;
+  let deviceNeedCharge = ((100 - currentPercentage) / 100) * device.charge_time;
   //user have more time to charge phone than it actually requires
-  if (device.charge_time < timeToChargeMinutes) {
+  if (deviceNeedCharge < timeToChargeMinutes) {
     //variable to estimate actual time blocks to use for charging
     //if time is 00:31 and phone needs to be charged 100 minutes result is 2 BECAUSE 2 block = 120 minutes
-    let deviceChargeH = Math.floor(device.charge_time / 60);
+    let deviceChargeH = Math.floor(deviceNeedCharge / 60);
     if (deviceChargeH % 60 !== 0) {
       deviceChargeH++;
     }
