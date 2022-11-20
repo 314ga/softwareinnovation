@@ -18,6 +18,8 @@ const VirtualSocket = (props) => {
       const deviceName = props.devices.filter(
         (device) => device.name === selectedDevice
       );
+      console.log(deviceName[0], props.priceData, percentage.current.value);
+      console.log(selectedHours);
       const chargeTimes = getChargeTimes(
         deviceName[0],
         selectedHours,
@@ -45,8 +47,6 @@ const VirtualSocket = (props) => {
     if (chargingPlan && chargingPlan.charge_time.length > 0) {
       chargingPlan.charge_time.every((plan) => {
         const dateTime = new Date(plan.date);
-        console.log(dateTime.getHours());
-        console.log(nowHours);
         if (dateTime.getHours() === nowHours) {
           isOn = "on";
           return false;

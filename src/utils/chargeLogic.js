@@ -54,7 +54,14 @@ export const getChargeTimes = (
     if (deviceChargeH % 60 !== 0) {
       deviceChargeH++;
     }
-
+    if (deviceNeedCharge < 60 && deviceNeedCharge > 0) {
+      console.log();
+      const date = new Date(slicedSorted[0].HourDK);
+      chargingSlotMinutes.push({
+        charge_time: deviceNeedCharge,
+        date: getDateYYYYMMDDHHMMSS(date),
+      });
+    }
     for (let count = 0; count < deviceChargeH; count++) {
       const date = new Date(slicedSorted[count].HourDK);
       if (deviceNeedCharge - 60 > 0) {
