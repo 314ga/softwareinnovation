@@ -24,6 +24,5 @@ yarn-error.log*
 firestore-debug.log
 firebase-debug.log
 package-lock.json
-ui-debug.log
 .firebaserc
 .firebaserc
