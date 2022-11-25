@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { pics } from "../constants";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import { getChargingPlan } from "../database/firestore";
 import Form from "react-bootstrap/Form";
 import { getChargeTimes } from "../utils/chargeLogic";
 import { addChargingPlan } from "../database/firestore";
@@ -11,15 +12,18 @@ const VirtualSocket = (props) => {
   const [selectedDevice, setSelectedDevice] = useState("");
   const [selectedSocket, setSelectedSocket] = useState("1");
   const [selectedHours, setSelectedHours] = useState("1");
+  const [chargingPlan, setChargingPlan] = useState([]);
   const percentage = useRef(0);
+
+  useEffect(() => {
+    if (chargingPlan.length < 1) setChargingPlan(props.chargingPlan);
+  });
   const startCharge = (e) => {
     e.preventDefault();
     if (selectedDevice !== "" && percentage.current.value) {
       const deviceName = props.devices.filter(
         (device) => device.name === selectedDevice
       );
-      console.log(deviceName[0], props.priceData, percentage.current.value);
-      console.log(selectedHours);
       const chargeTimes = getChargeTimes(
         deviceName[0],
         selectedHours,
@@ -30,8 +34,18 @@ const VirtualSocket = (props) => {
         socket: "socket" + selectedSocket,
         chargePlan: chargeTimes,
       };
-      console.log(data);
-      addChargingPlan(data);
+
+      addChargingPlan(data).then((r) => {
+        getChargingPlan()
+          .then((re) => {
+            if (re.length > 0) {
+              setChargingPlan(re);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      });
       //console.log(selectedSocket);
     } else {
       //display alert
@@ -43,10 +57,12 @@ const VirtualSocket = (props) => {
   const checkSocketOn = (socketNumber) => {
     const nowHours = new Date().getHours();
     let isOn = "";
-    const chargingPlan = props.chargingPlan[socketNumber];
-    if (chargingPlan && chargingPlan.charge_time.length > 0) {
-      chargingPlan.charge_time.every((plan) => {
+    const chargingPlanTemp = chargingPlan[socketNumber];
+    console.log(chargingPlanTemp);
+    if (chargingPlanTemp && chargingPlanTemp.charge_time.length > 0) {
+      chargingPlanTemp.charge_time.every((plan) => {
         const dateTime = new Date(plan.date);
+        console.log(dateTime.getHours());
         if (dateTime.getHours() === nowHours) {
           isOn = "on";
           return false;
@@ -155,7 +171,7 @@ const VirtualSocket = (props) => {
         </Row>
       </Row>
       <Row>
-        {props.chargingPlan.map((element, index) => {
+        {chargingPlan.map((element, index) => {
           return (
             <Col key={"Socket" + index}>
               {element && element.charge_time.length > 0 && (
@@ -176,29 +192,31 @@ const VirtualSocket = (props) => {
           );
         })}
       </Row>
-      <Row>
-        <div id="counter">
-          <img
-            id="over_pin1"
-            src={pics.pin1}
-            alt="1"
-            className={checkSocketOn(0)}
-          />
-          <img
-            id="over_pin2"
-            src={pics.pin2}
-            alt="2"
-            className={checkSocketOn(1)}
-          />
-          <img
-            id="over_pin3"
-            src={pics.pin3}
-            alt="3"
-            className={checkSocketOn(2)}
-          />
-          <img id="socket" src={pics.socket} alt="bg" />
-        </div>
-      </Row>
+      {chargingPlan && (
+        <Row>
+          <div id="counter">
+            <img
+              id="over_pin1"
+              src={pics.pin1}
+              alt="1"
+              className={checkSocketOn(0)}
+            />
+            <img
+              id="over_pin2"
+              src={pics.pin2}
+              alt="2"
+              className={checkSocketOn(1)}
+            />
+            <img
+              id="over_pin3"
+              src={pics.pin3}
+              alt="3"
+              className={checkSocketOn(2)}
+            />
+            <img id="socket" src={pics.socket} alt="bg" />
+          </div>
+        </Row>
+      )}
     </Container>
   );
 };

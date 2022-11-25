@@ -54,8 +54,9 @@ export const getChargeTimes = (
     if (deviceChargeH % 60 !== 0) {
       deviceChargeH++;
     }
+    console.log(deviceChargeH + "hhhhhhhhhhhhhhhhh");
     if (deviceNeedCharge < 60 && deviceNeedCharge > 0) {
-      console.log();
+      console.log(deviceNeedCharge);
       const date = new Date(slicedSorted[0].HourDK);
       chargingSlotMinutes.push({
         charge_time: deviceNeedCharge,
@@ -79,14 +80,24 @@ export const getChargeTimes = (
   }
   //charge phone right away
   else {
+    console.log(timeToCharge);
+    console.log(deviceNeedCharge);
     let counter = 0;
     for (counter; counter < timeToCharge; counter++) {
       const date = new Date(prices[currentH + counter].HourDK);
       if (deviceNeedCharge - 60 > 0) {
-        chargingSlotMinutes.push({
-          charge_time: 60,
-          date: getDateYYYYMMDDHHMMSS(date),
-        });
+        if (counter + 1 !== timeToCharge) {
+          chargingSlotMinutes.push({
+            charge_time: 60 - now.getMinutes(),
+            date: getDateYYYYMMDDHHMMSS(date),
+          });
+        } else {
+          chargingSlotMinutes.push({
+            charge_time: 60,
+            date: getDateYYYYMMDDHHMMSS(date),
+          });
+        }
+
         deviceNeedCharge = deviceNeedCharge - 60;
       } else
         chargingSlotMinutes.push({
